@@ -52,12 +52,12 @@
 
 ### JSONルールの配置
 
-クライアントのみで動作するように、ルールJSONは `public/rules/` に配置しています。
+クライアントのみで動作するように、ルールJSONは `docs/rules/` に配置しています。
 
-- `public/rules/easy.json`
-- `public/rules/normal.json`
-- `public/rules/aizuwakamatsu.json`
-- `public/rules/nfc_mapping.json`
+- `docs/rules/easy.json`
+- `docs/rules/normal.json`
+- `docs/rules/aizuwakamatsu.json`
+- `docs/rules/nfc_mapping.json`
 
 ## ライセンス
 MIT License

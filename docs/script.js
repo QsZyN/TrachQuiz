@@ -449,9 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const canShowChoices = !nfcAvailable;
-
-        if (!canShowChoices || !quizScreen.classList.contains('active-screen')) {
+        if (!quizScreen.classList.contains('active-screen')) {
             choiceAccordion.classList.add('hidden');
             choiceAccordion.open = false;
             updateChoiceAccordionSummaryText();
@@ -460,7 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         choiceAccordion.classList.remove('hidden');
-        // NFCが使えない端末では、クリック入力の選択肢を初期展開して操作を迷わせない。
+        // NFCが使えない端末では初期展開し、NFC対応端末では折りたたみ開始にする。
         choiceAccordion.open = !nfcAvailable;
         updateChoiceAccordionSummaryText();
         choicePanel.innerHTML = '';
