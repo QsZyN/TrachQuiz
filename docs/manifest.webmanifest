@@ -1,0 +1,24 @@
+{
+    "name": "会津若松市 ゴミ分別クイズ",
+    "short_name": "ゴミ分別クイズ",
+    "description": "会津若松市のごみ分別を学べるクイズアプリ",
+    "lang": "ja",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#ffffff",
+    "theme_color": "#4CAF50",
+    "icons": [
+        {
+            "src": "icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
