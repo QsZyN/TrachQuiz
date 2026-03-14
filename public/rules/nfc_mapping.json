@@ -1,0 +1,84 @@
+{
+  "choices": {
+    "〇": {
+      "questionType": "marubatsu",
+      "nfcIds": [
+        "87392698",
+        "04D92063FF6180"
+      ]
+    },
+    "×": {
+      "questionType": "marubatsu",
+      "nfcIds": [
+        "874D6098",
+        "04ABA068FF6180"
+      ]
+    },
+    "燃やせるごみ": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "04E584AA852190"
+      ]
+    },
+    "燃やせないごみ": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "04DE18AA852190"
+      ]
+    },
+    "プラスチック製容器包装・製品": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "04FF4BAA852190"
+      ]
+    },
+    "かん": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "04576DAA852191"
+      ]
+    },
+    "びん": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "0437EFAA852191"
+      ]
+    },
+    "ペットボトル": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "04473FAA852191"
+      ]
+    },
+    "古紙": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "04F62DAA852190"
+      ]
+    },
+    "古着・古布": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "048A52AA852190"
+      ]
+    },
+    "粗大ごみ": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "041C6EAA852190"
+      ]
+    },
+    "ボランティア清掃ゴミ": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "A725D298"
+      ]
+    },
+    "市や業者に連絡": {
+      "questionType": "bunbetsu",
+      "nfcIds": [
+        "044681AA852190"
+      ]
+    }
+  }
+}
