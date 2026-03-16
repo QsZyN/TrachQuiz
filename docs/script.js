@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let nfcMapping = {};
     let nfcIdLookup = {};
     let nfcReader = null;
+    let nfcpassDevice = null;
+    let nfcpassPollingTimer = null;
+    let nfcpassPollingInProgress = false;
     let nfcAvailable = false;
     let answerPool = [];
     let bunbetsuAnswerPool = [];
@@ -219,56 +222,112 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (!('NDEFReader' in window)) {
-            nfcAvailable = false;
-            updateNfcStatus('このブラウザはWeb NFCに未対応です（Android版Chrome推奨）');
+        if ('NDEFReader' in window) {
+            nfcAvailable = true;
+            updateNfcStatus('画面をタップしてNFCを有効化してください');
+            document.body.addEventListener('click', startWebNfcScan, { once: true });
             return;
         }
 
-        nfcAvailable = true;
+        if (canUseNfcpass()) {
+            nfcAvailable = true;
+            updateNfcStatus('PC NFCモード: 画面をタップしてPaSoRiを接続してください');
+            document.body.addEventListener('click', connectNfcpassReader, { once: true });
+            return;
+        }
 
-        updateNfcStatus('画面をタップしてNFCを有効化してください');
+        nfcAvailable = false;
+        updateNfcStatus('この端末ではNFCを利用できません（Web NFCまたはPaSoRi + Chromeが必要です）');
+    }
 
-        // Web NFC scan() must be started by a user gesture.
-        const startNfcScan = async () => {
-            if (nfcReader) {
+    function canUseNfcpass() {
+        return typeof window.NfcpassDeviceLoader !== 'undefined' && 'usb' in navigator;
+    }
+
+    async function startWebNfcScan() {
+        if (nfcReader) {
+            return;
+        }
+
+        try {
+            nfcReader = new NDEFReader();
+            await nfcReader.scan();
+
+            nfcReader.onreading = (event) => {
+                const normalizedId = normalizeTagId(event.serialNumber);
+                processDetectedTag(normalizedId, event.serialNumber, 'Web NFC');
+            };
+
+            nfcReader.onreadingerror = () => {
+                updateNfcStatus('タグ読み取りに失敗しました。もう一度かざしてください');
+            };
+
+            updateNfcStatus('NFC待機中: タグをかざしてください');
+            console.log('Web NFC scan started');
+        } catch (error) {
+            console.error('Failed to start Web NFC:', error);
+            nfcReader = null;
+            updateNfcStatus('NFC開始に失敗しました（権限を確認してください）');
+        }
+    }
+
+    async function connectNfcpassReader() {
+        if (nfcpassDevice || !canUseNfcpass()) {
+            return;
+        }
+
+        try {
+            nfcpassDevice = await window.NfcpassDeviceLoader.connectDevice();
+            updateNfcStatus('PaSoRi接続完了: カードをかざしてください');
+            startNfcpassPolling();
+            console.log('nfcpass reader connected');
+        } catch (error) {
+            console.error('Failed to connect PaSoRi via nfcpass:', error);
+            nfcpassDevice = null;
+            updateNfcStatus('PaSoRi接続に失敗しました（Chromeで権限を許可してください）');
+        }
+    }
+
+    function startNfcpassPolling() {
+        if (nfcpassPollingTimer || !nfcpassDevice) {
+            return;
+        }
+
+        nfcpassPollingTimer = setInterval(async () => {
+            if (!nfcpassDevice || nfcpassPollingInProgress) {
                 return;
             }
 
+            nfcpassPollingInProgress = true;
             try {
-                nfcReader = new NDEFReader();
-                await nfcReader.scan();
+                const card = await nfcpassDevice.readCardInfo();
+                if (!card || !card.idm) {
+                    return;
+                }
 
-                nfcReader.onreading = (event) => {
-                    const normalizedId = normalizeTagId(event.serialNumber);
-                    const category = nfcIdLookup[normalizedId];
-                    console.log('NFC tag read:', event.serialNumber, '=>', normalizedId, 'category:', category);
-
-                    if (!category) {
-                        updateNfcStatus(`未登録タグ: ${normalizedId}`);
-                        return;
-                    }
-
-                    updateNfcStatus(`タグ検出: ${category}`);
-                    if (quizScreen.classList.contains('active-screen') && isAnswering) {
-                        handleAnswer(category);
-                    }
-                };
-
-                nfcReader.onreadingerror = () => {
-                    updateNfcStatus('タグ読み取りに失敗しました。もう一度かざしてください');
-                };
-
-                updateNfcStatus('NFC待機中: タグをかざしてください');
-                console.log('Web NFC scan started');
+                const normalizedId = normalizeTagId(card.idm);
+                processDetectedTag(normalizedId, card.idm, 'nfcpass');
             } catch (error) {
-                console.error('Failed to start Web NFC:', error);
-                nfcReader = null;
-                updateNfcStatus('NFC開始に失敗しました（権限を確認してください）');
+                console.error('nfcpass read failed:', error);
+            } finally {
+                nfcpassPollingInProgress = false;
             }
-        };
+        }, 700);
+    }
 
-        document.body.addEventListener('click', startNfcScan, { once: true });
+    function processDetectedTag(normalizedId, rawId, sourceLabel) {
+        const category = nfcIdLookup[normalizedId];
+        console.log(`${sourceLabel} tag read:`, rawId, '=>', normalizedId, 'category:', category);
+
+        if (!category) {
+            updateNfcStatus(`未登録タグ: ${normalizedId}`);
+            return;
+        }
+
+        updateNfcStatus(`タグ検出: ${category}`);
+        if (quizScreen.classList.contains('active-screen') && isAnswering) {
+            handleAnswer(category);
+        }
     }
 
     function buildNfcIdLookup(mappingData) {

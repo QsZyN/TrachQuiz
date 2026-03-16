@@ -1,0 +1,31 @@
+{
+  "name": "trachquiz",
+  "version": "1.0.0",
+  "description": "市町村ごとのゴミ分別ルールを楽しく学べるクイズアプリです。 現在は「福島県会津若松市」のルールに対応しています。",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:nfcpass": "esbuild tools/nfcpass-entry.js --bundle --platform=browser --format=iife --outfile=docs/vendor/nfcpass.bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WATANABEShuntaro/TrachQuiz.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/WATANABEShuntaro/TrachQuiz/issues"
+  },
+  "homepage": "https://github.com/WATANABEShuntaro/TrachQuiz#readme",
+  "dependencies": {
+    "nfcpass": "github:nijibox/nfcpass"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.4"
+  }
+}

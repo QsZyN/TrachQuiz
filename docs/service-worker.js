@@ -1,9 +1,10 @@
-const CACHE_NAME = 'trash-quiz-v1';
+const CACHE_NAME = 'trash-quiz-v2';
 const APP_SHELL = [
     './',
     './index.html',
     './style.css',
     './script.js',
+    './vendor/nfcpass.bundle.js',
     './manifest.webmanifest',
     './icons/icon-192.png',
     './icons/icon-512.png',

@@ -41,6 +41,17 @@
 2. Web NFC 対応ブラウザ（推奨: Android版 Chrome）
 3. `localhost` でアクセスすること（Web NFCは安全なオリジンが必要）
 
+### PCでNFCリーダーを使う場合（PaSoRi）
+
+`nijibox/nfcpass` を使ったWebUSB経由の読み取りに対応しています。
+
+1. Google Chrome を使用する
+2. PaSoRi をUSB接続する
+3. 初回または依存更新時に以下を実行
+   - `npm install`
+   - `npm run build:nfcpass`
+4. アプリ起動後、画面タップ時にUSBデバイス接続ダイアログでPaSoRiを許可する
+
 ### 立ち上げ
 
 1. 静的サーバーを起動
